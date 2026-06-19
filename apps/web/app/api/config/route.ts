@@ -1,14 +1,17 @@
 /**
  * Runtime configuration endpoint.
  *
- * `NEXT_PUBLIC_*` values are inlined at build time, which is brittle on PaaS
- * platforms (e.g. Dokploy) that don't forward env vars as Docker build args.
- * This route reads the backend URL from the environment at *request* time, so
- * the API base can be changed by setting an env var and restarting — no rebuild.
+ * IMPORTANT: this intentionally reads `API_URL` (and `BACKEND_URL`), NOT
+ * `NEXT_PUBLIC_API_URL`. Next.js statically inlines every `process.env.NEXT_PUBLIC_*`
+ * reference at build time — even inside server route handlers — so a public var
+ * would freeze to its build-time value and never reflect the runtime env. Plain
+ * (non-public) vars are read from the live process env at request time, which
+ * lets the backend URL be changed by setting an env var and redeploying — no
+ * code rebuild required.
  */
 export const dynamic = 'force-dynamic';
 
 export function GET() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || '';
+  const apiUrl = process.env.API_URL || process.env.BACKEND_URL || '';
   return Response.json({ apiUrl: apiUrl.replace(/\/$/, '') });
 }
