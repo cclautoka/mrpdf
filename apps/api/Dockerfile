@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     poppler-utils \
     imagemagick \
     python3 python3-pip \
+    libgl1 libglib2.0-0 \
     fonts-liberation fonts-dejavu fonts-noto-cjk \
     ca-certificates \
   && rm -rf /var/lib/apt/lists/*
