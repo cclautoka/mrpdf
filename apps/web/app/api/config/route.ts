@@ -11,7 +11,22 @@
  */
 export const dynamic = 'force-dynamic';
 
+/**
+ * Read an env var by a dynamically-built key so the Next.js build cannot
+ * statically inline it. This lets us read the *runtime* value of
+ * `NEXT_PUBLIC_API_URL` (which platforms like Dokploy inject into the
+ * container) even though a literal `process.env.NEXT_PUBLIC_API_URL`
+ * reference would be frozen at build time.
+ */
+function readRuntimeEnv(name: string): string | undefined {
+  return process.env[name];
+}
+
 export function GET() {
-  const apiUrl = process.env.API_URL || process.env.BACKEND_URL || '';
+  const apiUrl =
+    process.env.API_URL ||
+    process.env.BACKEND_URL ||
+    readRuntimeEnv(['NEXT', 'PUBLIC', 'API', 'URL'].join('_')) ||
+    '';
   return Response.json({ apiUrl: apiUrl.replace(/\/$/, '') });
 }
