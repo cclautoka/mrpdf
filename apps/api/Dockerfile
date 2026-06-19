@@ -19,9 +19,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     qpdf \
     poppler-utils \
     imagemagick \
+    python3 python3-pip \
     fonts-liberation fonts-dejavu fonts-noto-cjk \
     ca-certificates \
   && rm -rf /var/lib/apt/lists/*
+
+# pdf2docx: reliable PDF -> editable DOCX conversion (LibreOffice cannot do this,
+# as it imports PDFs into Draw which has no Writer-format export).
+RUN pip3 install --no-cache-dir --break-system-packages pdf2docx
 
 # pnpm via corepack.
 RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
