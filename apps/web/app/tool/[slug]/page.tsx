@@ -1,3 +1,4 @@
+import { BackendNotice } from '@/components/BackendNotice';
 import { Icon } from '@/components/Icon';
 import { ToolView } from '@/components/ToolView';
 import { allTools, getTool } from '@/lib/tools';
@@ -61,13 +62,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
         </div>
       </div>
 
-      {!isClient && (
-        <div className="mb-6 rounded-xl border border-sky-200 bg-sky-50 p-4 text-sm text-sky-900 dark:border-sky-900 dark:bg-sky-950/30 dark:text-sky-200">
-          This tool requires the MR PDF backend (LibreOffice/Ghostscript/OCR). Start it with{' '}
-          <code className="rounded bg-black/10 px-1">docker compose up</code> or run the API
-          locally, then set <code className="rounded bg-black/10 px-1">NEXT_PUBLIC_API_URL</code>.
-        </div>
-      )}
+      {!isClient && <BackendNotice />}
 
       <ToolView slug={tool.slug} />
     </div>
